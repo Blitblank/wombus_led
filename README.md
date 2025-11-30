@@ -1,14 +1,15 @@
 
 # WombusLED
 
-For now, a template for an embdedded application for the ESP32-S3-Wroom1 module running ESP-IDF
-Will update with firmware for the controller board for the WS2812b RGBLED panels
+Firmware for controlling WS2812b matrices with ESP-IDF.
+This embedded application is designed around the hardware described in this repository, though the goal is to broaden to other hardware targets.
+The primary target is the ESP32-S3 Wroom1 N4R2 module.
+KiCad schematic and PCB layout files can be found in the pcb directory.
 
-KiCad schematic and PCB layout files can be found in the pcb directory
-
-Scripts are in scripts directory, named appropriately
+Scripts are in scripts directory, named appropriately.
 
 ## Development plan: 
+- [x] Create repository.
 - [ ] Build setup, get working hello-world program.
 - [ ] Develop 7-segment display driver for the soburg-v2 board, which uses 32-bit shift registers.
     Ensures functional hardware interaction and interface design.
