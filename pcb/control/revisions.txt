@@ -1,0 +1,22 @@
+
+revisions from v1:
+- incorrect footprint for 1/4'' jack (can make it work)
+- 7 segment displays can be closer together (footprints are exact)
+- usb diode array wrong footprint (sot666 should be sot23-6) [or order the correct footprint works too]
+- remove 1.3k ohm resistor on Vcc of optoisolator
+- remove grounding resistor (and ground connection) on pin 2 of the midi DIN
+- deisolate potentiometer rv3's ground island
+- add silkscreen text to the boot and enable buttons
+- add silkscreen text on the back detailing dimensions for board and holes
+- enable pin on esp32 needs a 10kohm pullup resistor and a 1uf pulldown capacitor, separate from the button circuit
+- remove 22 ohm in-line resistors on d+ and d- usb lines (o ohm resistor recommended by the datasheet)
+- probably remove the decoupling capacitors on the usb lines too
+- breakout i2s interface
+- buy 0 ohm resistors
+- you can afford a lot more room between chips and components (besides power capacitors)
+- somethings funky with op-amp U4 (it gets hot when powered). also add trimmer potentiometers to tune its gain
+- actually follow the datasheet for the pcm5102 man
+	- 2.2nf instead of 2.2uf capacitors on the l/r audio out lines
+	- tie mute pin directly to power source
+	- theres a whole pcb layout section for TI chips
+- soldering tip: chips always go first
