@@ -22084,7 +22084,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "B1911B"
+		(property "Value" "B1911R"
 			(at 0 -1.43 90)
 			(layer "B.Fab")
 			(uuid "c1484363-b3dc-48b7-9c64-d06df10d96a2")
@@ -22764,7 +22764,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "TBDuF"
+		(property "Value" "100uF"
 			(at 2.5 -5.25 0)
 			(layer "B.Fab")
 			(uuid "a592ba06-f886-4233-b793-557c4b352735")
@@ -26393,7 +26393,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "TBDuF"
+		(property "Value" "100uF"
 			(at 2.5 -5.25 0)
 			(layer "B.Fab")
 			(uuid "036ec2e2-300a-42a7-987d-e4811bf430e0")
@@ -28139,7 +28139,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "TBD"
+		(property "Value" "0.1μF"
 			(at 0 -1.43 90)
 			(layer "B.Fab")
 			(uuid "2125effb-a0e4-4175-9ce6-cce3daef6fd0")
@@ -29018,7 +29018,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "52.3Ω"
+		(property "Value" "52.3kΩ"
 			(at 0 -1.43 90)
 			(layer "B.Fab")
 			(uuid "f8ed0ff3-21fe-4dac-b950-096d117b1132")
@@ -30643,7 +30643,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "TBD"
+		(property "Value" "100pF"
 			(at 0 -1.43 90)
 			(layer "B.Fab")
 			(uuid "f93816e5-03a1-48e1-b93c-11d13f82d8e9")
@@ -31613,7 +31613,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "TBD"
+		(property "Value" "10μF"
 			(at 0 -1.43 0)
 			(layer "B.Fab")
 			(uuid "4ecb6ecd-64d9-4e42-b908-ec3e49aafb1b")
@@ -45894,7 +45894,6 @@
 		(polygon
 			(pts
 				(xy 152 87.5) (xy 153.75 85.5) (xy 154.75 84.5) (xy 149 84.5) (xy 150.75 86.25) (xy 150.75 87.5)
-				(xy 150.75 87.5)
 			)
 		)
 		(filled_polygon

@@ -1,1 +1,13 @@
 build/
+
+pcb/panel/wombus64_led-backups/
+pcb/panel/~*
+pcb/panel/#auto_saved_files#
+pcb/panel/fp-info-cache
+pcb/panel/wombus64_led.kicad_prl
+
+pcb/panel/soburg2-backups/
+pcb/control/~*
+pcb/control/#auto_saved_files#
+pcb/control/fp-info-cache
+pcb/control/soburg2.kicad_prl
