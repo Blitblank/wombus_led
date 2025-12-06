@@ -1,2 +1,5 @@
 build/
 lib/idf-tools/*
+
+sdkconfig
+sdkconfig.old
