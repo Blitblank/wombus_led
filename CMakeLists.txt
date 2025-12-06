@@ -1,7 +1,7 @@
 
-# TODO: check version
 cmake_minimum_required(VERSION 3.16)
 
-include($ENV{IDF_PATH}/scripts/project.cmake)
+# For the esp-idf configuration
+include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 
-project(this)
+project(wombus_led)
