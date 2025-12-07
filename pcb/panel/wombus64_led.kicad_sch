@@ -6143,7 +6143,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TBD"
+		(property "Value" "0.1μF"
 			(at 330.2 91.948 0)
 			(effects
 				(font
@@ -7559,7 +7559,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "B1911B"
+		(property "Value" "B1911R"
 			(at 360.68 56.1974 90)
 			(effects
 				(font
@@ -7694,7 +7694,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TBDuF"
+		(property "Value" "100uF"
 			(at 365.252 91.948 0)
 			(effects
 				(font
@@ -8055,7 +8055,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TBDuF"
+		(property "Value" "100uF"
 			(at 357.632 91.948 0)
 			(effects
 				(font
@@ -8556,8 +8556,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TBD"
-			(at 295.91 94.488 0)
+		(property "Value" "10μF"
+			(at 295.402 94.488 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9264,8 +9264,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TBD"
-			(at 342.9 91.948 0)
+		(property "Value" "100pF"
+			(at 341.63 92.456 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10421,7 +10421,7 @@
 				)
 			)
 		)
-		(property "Value" "52.3Ω"
+		(property "Value" "52.3kΩ"
 			(at 348.488 88.646 90)
 			(effects
 				(font
