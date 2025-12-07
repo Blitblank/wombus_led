@@ -1,5 +1,19 @@
 build/
 lib/idf-tools/*
 
+pcb/control/*
+!pcb/control/README.md
+!pcb/control/revisions.txt
+!pcb/control/soburg2.kicad_pcb
+!pcb/control/soburg2.kicad_pro
+!pcb/control/soburg2.kicad_pch
+
+pcb/panel/*
+!pcb/panel/revisions.txt
+!pcb/panel/wombus64_led.kicad_pcb
+!pcb/panel/wombus64_led.kicad_pro
+!pcb/panel/wombus64_led.kicad_pch
+
 sdkconfig
 sdkconfig.old
+

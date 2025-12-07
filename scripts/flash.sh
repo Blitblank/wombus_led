@@ -12,3 +12,6 @@ idf.py set-target esp32s3
 idf.py -b 115200 flash
 
 # idf.py autodetects port but use -p <port> to specify
+
+# idk how to put it in the right place
+mv ${PWD}/sdkconfig ${PWD}/config/sdkconfig
