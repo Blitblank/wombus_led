@@ -29,3 +29,9 @@ Scripts are in scripts directory, named appropriately.
 - [ ] Microphone for sound-based effects like a spectrum analyzer
     
 This is basic but hopefully can be good platform for future WS2812b projects.
+
+## Scripts:
+After cloning: $ ./scripts/repo-setup # installs esp-idf, sets up target configurations
+To build:      $ ./scripts/build.sh
+To flash:      $ ./scripts/flash.sh # note: flash.sh automatically builds
+To monitor:    $ ./scripts/monitor.sh
