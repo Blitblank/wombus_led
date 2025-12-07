@@ -17,3 +17,4 @@ pcb/panel/*
 sdkconfig
 sdkconfig.old
 
+.vscode/*
