@@ -10,6 +10,7 @@ export SDKCONFIG_DEFAULTS=${PWD}/config/sdkconfig.defaults
 
 . ${IDF_PATH}/export.sh
 
+idf.py set-target esp32s3
 idf.py build
 
 # idk how to put it in the right place

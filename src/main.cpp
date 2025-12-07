@@ -14,7 +14,7 @@ void app_main(void) {
     ESP_LOGI(TAG, "Program start");
 
     App app;
-    int8_t status = app.main();
+    int32_t status = app.main();
     ESP_LOGI(TAG, "App main returned status %d", status);
 }
 
