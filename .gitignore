@@ -1,13 +1,20 @@
 build/
+lib/idf-tools/*
 
-pcb/panel/wombus64_led-backups/
-pcb/panel/~*
-pcb/panel/#auto_saved_files#
-pcb/panel/fp-info-cache
-pcb/panel/wombus64_led.kicad_prl
+pcb/control/*
+!pcb/control/README.md
+!pcb/control/revisions.txt
+!pcb/control/soburg2.kicad_pcb
+!pcb/control/soburg2.kicad_pro
+!pcb/control/soburg2.kicad_pch
 
-pcb/panel/soburg2-backups/
-pcb/control/~*
-pcb/control/#auto_saved_files#
-pcb/control/fp-info-cache
-pcb/control/soburg2.kicad_prl
+pcb/panel/*
+!pcb/panel/revisions.txt
+!pcb/panel/wombus64_led.kicad_pcb
+!pcb/panel/wombus64_led.kicad_pro
+!pcb/panel/wombus64_led.kicad_pch
+
+sdkconfig
+sdkconfig.old
+
+.vscode/*
