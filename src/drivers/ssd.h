@@ -29,6 +29,7 @@ uint8_t map[17] = { // encoding of digits on the seven segment display
 };
 
 void shiftInit(const ssd_595_t* device);
+void pulse(gpio_num_t pin);
 
 void addDecimal(uint8_t* data); // adds a decimal to a single digit
 

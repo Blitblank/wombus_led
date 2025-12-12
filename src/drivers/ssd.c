@@ -1,6 +1,14 @@
 
 #include "ssd.h"
 
+inline void pulse(gpio_num_t pin) {
+    gpio_set_level(pin, 1);
+    esp_rom_delay_us(1);
+    gpio_set_level(pin, 0);
+    esp_rom_delay_us(1);
+}
+
+
 void shiftInit(const ssd_595_t* device) {
     gpio_config_t ioConfig = {
         .mode = GPIO_MODE_OUTPUT,
