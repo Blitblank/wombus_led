@@ -1,6 +1,14 @@
 
+#pragma once
+
 #include <stdint.h>
 #include "driver/gpio.h"
+
+#define SSD_DIGIT_MAP_LENGTH 32
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct {
     gpio_num_t dataPin;
@@ -8,7 +16,10 @@ typedef struct {
     gpio_num_t latchPin;
 } ssd_595_t;
 
-uint8_t map[17] = { // encoding of digits on the seven segment display
+// encoding of digits on the seven segment display
+// 0bxxxxxxxx
+//   ABCDEFG.
+static uint8_t digitMap[SSD_DIGIT_MAP_LENGTH] = { 
     0xFC, // 0
     0x60, // 1
     0xDA, // 2
@@ -26,7 +37,24 @@ uint8_t map[17] = { // encoding of digits on the seven segment display
     0x9E, // E
     0x8E, // F
     0x02, // -
+    0x01, // .
+    0x92, // Error code (not implemented)
+    0x92, // Error code (not implemented)
+    0x92, // Error code (not implemented)
+    0x92, // Error code (not implemented)
+    0x92, // Error code (not implemented)
+    0x92, // Error code (not implemented)
+    0x92, // Error code (not implemented)
+    0x92, // Error code (not implemented)
+    0x92, // Error code (not implemented)
+    0x92, // Error code (not implemented)
+    0x92, // Error code (not implemented)
+    0x92, // Error code (not implemented)
+    0x92, // Error code (not implemented)
+    0x92, // Error code (not implemented)
 };
+
+// TODO: have these return error codes likewise
 
 void shiftInit(const ssd_595_t* device);
 void pulse(gpio_num_t pin);
@@ -36,3 +64,6 @@ void addDecimal(uint8_t* data); // adds a decimal to a single digit
 void shiftByte(const ssd_595_t* device, uint8_t byte); // outputs a serial byte, big-endian
 void shiftBytes(const ssd_595_t* device, uint8_t* bytes, size_t numBytes); // outputs multiple bytes
 
+#ifdef __cplusplus
+}
+#endif

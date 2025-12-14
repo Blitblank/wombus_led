@@ -1,5 +1,9 @@
 
-file(GLOB SRC_FILES "*.c" "*.cpp")
+file(GLOB SRC_FILES
+    "*.c"
+    "*.cpp"
+    "drivers/*.c"
+)
 
 idf_component_register(
     SRCS ${SRC_FILES}

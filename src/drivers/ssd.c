@@ -1,13 +1,18 @@
 
 #include "ssd.h"
 
+#include "esp_rom_sys.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 inline void pulse(gpio_num_t pin) {
     gpio_set_level(pin, 1);
     esp_rom_delay_us(1);
     gpio_set_level(pin, 0);
     esp_rom_delay_us(1);
 }
-
 
 void shiftInit(const ssd_595_t* device) {
     gpio_config_t ioConfig = {
@@ -24,7 +29,8 @@ void shiftInit(const ssd_595_t* device) {
 }
 
 void addDecimal(uint8_t* data) {
-    data = (*data | 0x01);
+    // TODO: fix
+    // data = (*data | 0x01);
 }
 
 void shiftByte(const ssd_595_t* device, uint8_t byte) {
@@ -40,3 +46,7 @@ void shiftBytes(const ssd_595_t* device, uint8_t* bytes, size_t numBytes) {
         shiftByte(device, bytes[i]);
     }
 }
+
+#ifdef __cplusplus
+}
+#endif
