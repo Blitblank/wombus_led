@@ -10,8 +10,8 @@ Scripts are in scripts directory, named appropriately.
 
 ## Development plan: 
 - [x] Create repository.
-- [ ] Build setup, get working hello-world program.
-- [ ] Develop 7-segment display driver for the soburg-v2 board, which uses 32-bit shift registers.
+- [x] Build setup, get working hello-world program.
+- [x] Develop 7-segment display driver for the soburg-v2 board, which uses 32-bit shift registers.
     Ensures functional hardware interaction and interface design.
 - [ ] Develop WS2812b driver, would be nice to have some kind of testing for this.
 - [ ] Develop WS2812b interface. I like the FastLed library for Arduino so might have a lot of similar functionality.
@@ -31,7 +31,7 @@ Scripts are in scripts directory, named appropriately.
 This is basic but hopefully can be good platform for future WS2812b projects.
 
 ## Scripts:
-After cloning: $ ./scripts/repo-setup # installs esp-idf, sets up target configurations
-To build:      $ ./scripts/build.sh
-To flash:      $ ./scripts/flash.sh # note: flash.sh automatically builds
-To monitor:    $ ./scripts/monitor.sh
+After cloning: $ ./scripts/repo-setup # installs esp-idf, sets up target configurations\
+To build:      $ ./scripts/build.sh\
+To flash:      $ ./scripts/flash.sh # note: flash.sh automatically builds\
+To monitor:    $ ./scripts/monitor.sh\

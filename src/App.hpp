@@ -16,6 +16,6 @@ private:
     
     uint32_t ledState = 0;
     uint32_t blinkTime = 250;
-    const char *TAG = "app";
+    const char *TAG = "app"; // TODO: instead of this for logging you can use __FILE__ or __func__
 
 };
