@@ -10,7 +10,7 @@ class SsdInterface {
 
 public:
 
-    SsdInterface(const uint8_t dataPin, const uint8_t clockPin, const uint8_t latchPinPin, size_t numDigits);
+    SsdInterface(const ssd_595_t* device, size_t numDigits);
     ~SsdInterface() = default;
 
     // Outputs the data straight to hardware, mostly for testing purposes
@@ -35,7 +35,7 @@ public:
 
 private:
 
-    ssd_595_t* device_;
+    const ssd_595_t* device_;
 
     size_t numDigits_; // number of chained digits
     uint8_t* data_; // pointer to the data written

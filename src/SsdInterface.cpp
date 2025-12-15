@@ -1,11 +1,9 @@
 
 #include "SsdInterface.hpp"
 
-SsdInterface::SsdInterface(const uint8_t dataPin, const uint8_t clockPin, const uint8_t latchPin, size_t numDigits) : numDigits_(numDigits) {
+SsdInterface::SsdInterface(const ssd_595_t* device, size_t numDigits) : device_(device), numDigits_(numDigits) {
 
-    // create device
-    static ssd_595_t dev = { (gpio_num_t)dataPin, (gpio_num_t)clockPin, (gpio_num_t)latchPin };
-    device_ = &dev;
+    shiftInit(device_);
 
 }
 

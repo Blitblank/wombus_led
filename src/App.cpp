@@ -17,9 +17,12 @@ App::App() {
 
 uint32_t App::main() {
 
-    DemoTask demoTask{};
+    ESP_LOGI(__FILE__, "Running App::main()");
 
-    demoTask.start("BlinkTask", 2048, 5, 1);
+    static DemoTask demoTask{};
+
+    ESP_LOGI(__FILE__, "Starting DemoTask");
+    demoTask.start("DemoTask", 4096, 5, 1);
 
     return 1;
 }

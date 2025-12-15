@@ -14,6 +14,7 @@ typedef struct {
     gpio_num_t dataPin;
     gpio_num_t clockPin;
     gpio_num_t latchPin;
+    bool commonCathode; // false = common anode
 } ssd_595_t;
 
 // encoding of digits on the seven segment display
