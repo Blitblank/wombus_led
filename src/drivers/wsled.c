@@ -1,5 +1,7 @@
 
-#include "esp_ws28xx.h"
+#include "wsled.h"
+
+#include "esp_heap_caps.h"
 
 uint16_t* dmaBuffer;
 CRGB* wsledPixels;
@@ -28,7 +30,7 @@ static spi_settings_t spiSettings = {
         },
 };
 
-static const uint16_t timing_bits[16] = {
+static const uint16_t timingBits[16] = {
     0x1111, 0x7111, 0x1711, 0x7711, 0x1171, 0x7171, 0x1771, 0x7771,
     0x1117, 0x7117, 0x1717, 0x7717, 0x1177, 0x7177, 0x1777, 0x7777};
 
@@ -36,24 +38,24 @@ esp_err_t wsledInit(wsled_t* dev, CRGB** buffer) {
 
     type = dev->type;
     ledCount = dev->numLeds;
-    resetDelay = (dev.wsledType == WS2812B) ? WSLED_12_RESET_TIME : WSLED_15_RESET_TIME;
+    resetDelay = (dev->type == WS2812B) ? WSLED_12_RESET_TIME : WSLED_15_RESET_TIME;
 
     // 12 bytes for each led + bytes for initial zero and reset state
-    dmaBufferSize = dev->numLeds * 12 + (resetDelay + 1) * 2;
-    wsledPixels = malloc(sizeof(CRGB) * dev->numLeds);
+    dmaBufferSize = ledCount * 12 + (resetDelay + 1) * 2;
+    wsledPixels = malloc(sizeof(CRGB) * ledCount);
     if (wsledPixels == NULL) {
         return ESP_ERR_NO_MEM;
     }
     *buffer = wsledPixels;
-    spi_settings.buscfg.mosi_io_num = pin;
-    spi_settings.buscfg.max_transfer_sz = dmaBufferSize;
+    spiSettings.buscfg.mosi_io_num = dev->pin;
+    spiSettings.buscfg.max_transfer_sz = dmaBufferSize;
 
-    if (ESP_OK != spi_bus_initialize(spi_settings.host, &spi_settings.buscfg, spi_settings.dma_chan)) {
+    if (ESP_OK != spi_bus_initialize(spiSettings.host, &spiSettings.buscfg, spiSettings.dma_chan)) {
         free(wsledPixels);
         return -1;
     }
 
-    if (ESP_OK != spi_bus_add_device(spi_settings.host, &spi_settings.devcfg, &spi_settings.spi)) {
+    if (ESP_OK != spi_bus_add_device(spiSettings.host, &spiSettings.devcfg, &spiSettings.spi)) {
         free(wsledPixels);
         return -1;
     }
@@ -66,8 +68,8 @@ esp_err_t wsledInit(wsled_t* dev, CRGB** buffer) {
 }
 
 void wsledFill(CRGB color) {
-    for (int i = 0; i < n_of_leds; i++) {
-        ws28xx_pixels[i] = color;
+    for (int i = 0; i < ledCount; i++) {
+        wsledPixels[i] = color;
     }
 }
 
@@ -92,16 +94,16 @@ esp_err_t wsledUpdate() {
         }
         
         // Red
-        dmaBuffer[n++] = timing_bits[0x0f & (packedData >> 4)];
-        dmaBuffer[n++] = timing_bits[0x0f & (packedData)];
+        dmaBuffer[n++] = timingBits[0x0f & (packedData >> 4)];
+        dmaBuffer[n++] = timingBits[0x0f & (packedData)];
 
         // Green
-        dmaBuffer[n++] = timing_bits[0x0f & (packedData >> 12)];
-        dmaBuffer[n++] = timing_bits[0x0f & (packedData) >> 8];
+        dmaBuffer[n++] = timingBits[0x0f & (packedData >> 12)];
+        dmaBuffer[n++] = timingBits[0x0f & (packedData) >> 8];
 
         // Blue
-        dma_buffer[n++] = timing_bits[0x0f & (packedData >> 20)];
-        dma_buffer[n++] = timing_bits[0x0f & (packedData) >> 16];
+        dmaBuffer[n++] = timingBits[0x0f & (packedData >> 20)];
+        dmaBuffer[n++] = timingBits[0x0f & (packedData) >> 16];
 
     }
 
@@ -110,7 +112,7 @@ esp_err_t wsledUpdate() {
         dmaBuffer[n++] = 0;
     }
 
-    esp_err_t error = spi_device_transmit(spi_settings.spi, &(spi_transaction_t) {
+    esp_err_t error = spi_device_transmit(spiSettings.spi, &(spi_transaction_t) {
                                                     .length = dmaBufferSize * 8,
                                                     .tx_buffer = dmaBuffer,
                                                 });

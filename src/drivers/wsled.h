@@ -28,11 +28,6 @@ typedef struct {
     spi_bus_config_t buscfg;
 } spi_settings_t;
 
-typedef enum {
-    WS2812B = 0,
-    WS2815,
-} led_strip_model_t;
-
 typedef struct {
     gpio_num_t pin;
     WsledType type;
