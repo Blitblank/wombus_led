@@ -2,10 +2,17 @@
 #include "wsled.h"
 
 #include "esp_heap_caps.h"
+#include "esp_log.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 uint16_t* dmaBuffer;
 CRGB* wsledPixels;
-static int ledCount, resetDelay, dmaBufferSize;
+static uint32_t ledCount;
+static uint32_t resetDelay;
+static size_t dmaBufferSize;
 WsledType type;
 
 static spi_settings_t spiSettings = {
@@ -26,7 +33,7 @@ static spi_settings_t spiSettings = {
             .queue_size = 1,
             .command_bits = 0,
             .address_bits = 0,
-            .flags = SPI_DEVICE_TXBIT_LSBFIRST,
+            //.flags = SPI_DEVICE_TXBIT_LSBFIRST,
         },
 };
 
@@ -36,41 +43,54 @@ static const uint16_t timingBits[16] = {
 
 esp_err_t wsledInit(wsled_t* dev, CRGB** buffer) {
 
+    ESP_LOGI(__FILE__, "Initializing wsled device...");
+
     type = dev->type;
     ledCount = dev->numLeds;
     resetDelay = (dev->type == WS2812B) ? WSLED_12_RESET_TIME : WSLED_15_RESET_TIME;
+
+    ESP_LOGI(__FILE__, "mallocing the wsledPixel buffer with size %u bytes", sizeof(CRGB) * ledCount);
 
     // 12 bytes for each led + bytes for initial zero and reset state
     dmaBufferSize = ledCount * 12 + (resetDelay + 1) * 2;
     wsledPixels = malloc(sizeof(CRGB) * ledCount);
     if (wsledPixels == NULL) {
+        ESP_LOGI(__FILE__, "Allocating memory failed");
         return ESP_ERR_NO_MEM;
     }
     *buffer = wsledPixels;
     spiSettings.buscfg.mosi_io_num = dev->pin;
     spiSettings.buscfg.max_transfer_sz = dmaBufferSize;
 
+    ESP_LOGI(__FILE__, "Initializing spi interface...");
     if (ESP_OK != spi_bus_initialize(spiSettings.host, &spiSettings.buscfg, spiSettings.dma_chan)) {
         free(wsledPixels);
+        ESP_LOGI(__FILE__, "SPI initialization failed");
         return -1;
     }
 
+    ESP_LOGI(__FILE__, "Adding spi bus device...");
     if (ESP_OK != spi_bus_add_device(spiSettings.host, &spiSettings.devcfg, &spiSettings.spi)) {
         free(wsledPixels);
+        ESP_LOGI(__FILE__, "Failed to add spi bus device");
         return -1;
     }
 
-    if (NULL == heap_caps_malloc(dmaBufferSize, MALLOC_CAP_DMA)) {
+    ESP_LOGI(__FILE__, "heap_caps_malloc() with dmaBufferSize=%u...", dmaBufferSize);
+    dmaBuffer = heap_caps_malloc(dmaBufferSize, MALLOC_CAP_DMA);
+    if (NULL == dmaBuffer) {
         free(wsledPixels);
+        ESP_LOGI(__FILE__, "Failed to heap_caps_malloc");
         return -1;
     }
     return ESP_OK;
 }
 
-void wsledFill(CRGB color) {
+esp_err_t wsledFill(CRGB color) {
     for (int i = 0; i < ledCount; i++) {
         wsledPixels[i] = color;
     }
+    return 0;
 }
 
 esp_err_t wsledUpdate() {
@@ -82,28 +102,23 @@ esp_err_t wsledUpdate() {
 
     for (int i = 0; i < ledCount; i++) {
 
-        // Data you want to write to each LEDs
-
         CRGB currentPixel = wsledPixels[i];
 
-        uint32_t packedData;
-        if(type == WS2812B) { // different models have different color orders
-            packedData = currentPixel.g | ((uint32_t)currentPixel.r << 8) | ((uint32_t)currentPixel.b << 16) | ((uint32_t)(0x00) << 24);
-        } else {
-            packedData = currentPixel.r | ((uint32_t)currentPixel.g << 8) | ((uint32_t)currentPixel.b << 16) | ((uint32_t)(0x00) << 24);
-        }
-        
-        // Red
-        dmaBuffer[n++] = timingBits[0x0f & (packedData >> 4)];
-        dmaBuffer[n++] = timingBits[0x0f & (packedData)];
+        uint8_t b0 = (type == WS2812B) ? currentPixel.g : currentPixel.r;
+        uint8_t b1 = (type == WS2812B) ? currentPixel.r : currentPixel.g;
+        uint8_t b2 = currentPixel.b;
 
         // Green
-        dmaBuffer[n++] = timingBits[0x0f & (packedData >> 12)];
-        dmaBuffer[n++] = timingBits[0x0f & (packedData) >> 8];
+        dmaBuffer[n++] = timingBits[(b0 >> 4) & 0x0F];
+        dmaBuffer[n++] = timingBits[b0 & 0x0F];
+
+        // Red
+        dmaBuffer[n++] = timingBits[(b1 >> 4) & 0x0F];
+        dmaBuffer[n++] = timingBits[b1 & 0x0F];
 
         // Blue
-        dmaBuffer[n++] = timingBits[0x0f & (packedData >> 20)];
-        dmaBuffer[n++] = timingBits[0x0f & (packedData) >> 16];
+        dmaBuffer[n++] = timingBits[(b2 >> 4) & 0x0F];
+        dmaBuffer[n++] = timingBits[b2 & 0x0F];
 
     }
 
@@ -118,3 +133,7 @@ esp_err_t wsledUpdate() {
                                                 });
     return error;
 }
+
+#ifdef __cplusplus
+}
+#endif

@@ -6,8 +6,12 @@
 #include <stdio.h>
 #include <string.h>
 
-#define WSLED_12_RESET_TIME 3
+#define WSLED_12_RESET_TIME 30
 #define WSLED_15_RESET_TIME 30
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct {
     uint8_t r;
@@ -37,6 +41,10 @@ typedef struct {
 esp_err_t wsledInit(wsled_t* dev, CRGB** buffer);
 
 // test function
-esp_err_t wsledFillAll(CRGB color);
+esp_err_t wsledFill(CRGB color);
 
 esp_err_t wsledUpdate();
+
+#ifdef __cplusplus
+}
+#endif
