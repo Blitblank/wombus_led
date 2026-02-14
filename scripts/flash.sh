@@ -8,6 +8,7 @@ export IDF_PATH=${PWD}/lib/esp-idf
 export SDKCONFIG=${PWD}/config/sdkconfig
 export SDKCONFIG_DEFAULTS=${PWD}/config/sdkconfig.defaults
 
+export IDF_PATH_FORCE=1
 . ${IDF_PATH}/export.sh
 
 idf.py fullclean
