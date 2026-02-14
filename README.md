@@ -13,8 +13,8 @@ Scripts are in scripts directory, named appropriately.
 - [x] Build setup, get working hello-world program.
 - [x] Develop 7-segment display driver for the soburg-v2 board, which uses 32-bit shift registers.
     Ensures functional hardware interaction and interface design.
-- [ ] Develop WS2812b driver, would be nice to have some kind of testing for this.
-- [ ] Develop WS2812b interface. I like the FastLed library for Arduino so might have a lot of similar functionality.
+- [x] Develop WS2812b driver, would be nice to have some kind of testing for this.
+- [x] Develop WS2812b interface. I like the FastLed library for Arduino so might have a lot of similar functionality.
 - [ ] Implement proper app structure, with error checking and performance profiling
 - [ ] Add a couple LED effects- the random blink and rainbow sweep are easy ones.
 - [ ] Create a mock LED panel that executes natively to test LED effects outside of hardware. (SDL2 or something)

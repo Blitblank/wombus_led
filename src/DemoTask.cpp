@@ -7,8 +7,8 @@
 #include "esp_log.h"
 
 #include "SsdInterface.hpp"
+#include "WsledInterface.hpp"
 #include "pins.hpp"
-#include "drivers/wsled.h"
 
 DemoTask::DemoTask() {
 
@@ -23,11 +23,8 @@ void DemoTask::run() {
     SsdInterface ssd(&ssdDev, ssdDigits);
 
     // wsled device
-    size_t ledCount = 4;
-    wsled_t wsledDev = { gpio_ws2812b, WS2812B, ledCount};
-    // TODO: wsled interface
-    CRGB ledBuffer[4];
-    wsledInit(&wsledDev, (CRGB**)&ledBuffer);
+    wsled_t wsledDev = { gpio_ws2812b, WS2812B, 0 /* fixed */};
+    WsledInterface wsled(&wsledDev);
 
     uint32_t delay = 500; // ms
     uint8_t digit = 0;
@@ -37,15 +34,13 @@ void DemoTask::run() {
         digit++;
         if(digit >= 16) digit = 0;
 
-        //ledBuffer[0] = CRGB{100, 0, 80};
-        wsledFill(CRGB{100, 20, 20});
-        wsledUpdate();
+        wsled.fill(CRGB{100, 20, 20});
+        wsled.flush();
 
         vTaskDelay(delay / portTICK_PERIOD_MS);
 
-        //ledBuffer[0] = CRGB{0, 0, 10};
-        wsledFill(CRGB{20, 20, 100});
-        wsledUpdate();
+        wsled.fill(CRGB{20, 20, 100});
+        wsled.flush();
 
         vTaskDelay(delay / portTICK_PERIOD_MS);
     }

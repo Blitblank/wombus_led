@@ -8,12 +8,11 @@
 extern "C" {
 #endif
 
-uint16_t* dmaBuffer;
-CRGB* wsledPixels;
-static uint32_t ledCount;
-static uint32_t resetDelay;
-static size_t dmaBufferSize;
-WsledType type;
+static uint16_t* dmaBuffer;
+static CRGB* wsledPixels; // delete
+static uint32_t resetDelay; // delete
+static size_t dmaBufferSize; // delete
+static WsledType type; // delete
 
 static spi_settings_t spiSettings = {
     .host = SPI2_HOST,
@@ -41,24 +40,18 @@ static const uint16_t timingBits[16] = {
     0x1111, 0x7111, 0x1711, 0x7711, 0x1171, 0x7171, 0x1771, 0x7771,
     0x1117, 0x7117, 0x1717, 0x7717, 0x1177, 0x7177, 0x1777, 0x7777};
 
-esp_err_t wsledInit(wsled_t* dev, CRGB** buffer) {
+esp_err_t wsledInit(const wsled_t* dev) {
 
     ESP_LOGI(__FILE__, "Initializing wsled device...");
 
     type = dev->type;
-    ledCount = dev->numLeds;
     resetDelay = (dev->type == WS2812B) ? WSLED_12_RESET_TIME : WSLED_15_RESET_TIME;
 
-    ESP_LOGI(__FILE__, "mallocing the wsledPixel buffer with size %u bytes", sizeof(CRGB) * ledCount);
+    ESP_LOGI(__FILE__, "mallocing the wsledPixel buffer with size %u bytes", sizeof(CRGB) * dev->numLeds);
 
     // 12 bytes for each led + bytes for initial zero and reset state
-    dmaBufferSize = ledCount * 12 + (resetDelay + 1) * 2;
-    wsledPixels = malloc(sizeof(CRGB) * ledCount);
-    if (wsledPixels == NULL) {
-        ESP_LOGI(__FILE__, "Allocating memory failed");
-        return ESP_ERR_NO_MEM;
-    }
-    *buffer = wsledPixels;
+    dmaBufferSize = dev->numLeds * 12 + (resetDelay + 1) * 2;
+
     spiSettings.buscfg.mosi_io_num = dev->pin;
     spiSettings.buscfg.max_transfer_sz = dmaBufferSize;
 
@@ -86,14 +79,7 @@ esp_err_t wsledInit(wsled_t* dev, CRGB** buffer) {
     return ESP_OK;
 }
 
-esp_err_t wsledFill(CRGB color) {
-    for (int i = 0; i < ledCount; i++) {
-        wsledPixels[i] = color;
-    }
-    return 0;
-}
-
-esp_err_t wsledUpdate() {
+esp_err_t wsledUpdate(const CRGB* pixels, size_t ledCount) {
 
     uint32_t n = 0;
 
@@ -102,7 +88,7 @@ esp_err_t wsledUpdate() {
 
     for (int i = 0; i < ledCount; i++) {
 
-        CRGB currentPixel = wsledPixels[i];
+        CRGB currentPixel = pixels[i];
 
         uint8_t b0 = (type == WS2812B) ? currentPixel.g : currentPixel.r;
         uint8_t b1 = (type == WS2812B) ? currentPixel.r : currentPixel.g;

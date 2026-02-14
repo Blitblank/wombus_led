@@ -27,6 +27,15 @@ public:
     // Returns: execution status
     STATUS flush();
 
+    // Below are the helper functions for manipulating the led buffer
+
+    // Fills the buffer with a single color
+    // Returns: execution status
+    STATUS fill(CRGB color);
+
+    // getter for numLeds_
+    size_t ledCount() { return numLeds_; }
+
 private:
 
     const wsled_t* device_;

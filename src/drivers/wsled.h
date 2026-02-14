@@ -38,12 +38,10 @@ typedef struct {
     uint32_t numLeds;
 } wsled_t;
 
-esp_err_t wsledInit(wsled_t* dev, CRGB** buffer);
+// initializes the wsled device provided the device settings 
+esp_err_t wsledInit(const wsled_t* dev);
 
-// test function
-esp_err_t wsledFill(CRGB color);
-
-esp_err_t wsledUpdate();
+esp_err_t wsledUpdate(const CRGB* pixels, size_t ledCount);
 
 #ifdef __cplusplus
 }
