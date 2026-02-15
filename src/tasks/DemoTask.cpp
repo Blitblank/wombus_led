@@ -1,14 +1,11 @@
 
 #include "DemoTask.hpp"
 
-#include "driver/gpio.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
 #include "esp_log.h"
 
-#include "SsdInterface.hpp"
-#include "WsledInterface.hpp"
-#include "pins.hpp"
+#include "ssd/SsdInterface.hpp"
+#include "wsled/WsledInterface.hpp"
+#include "shared/pins.h"
 
 DemoTask::DemoTask() {
 

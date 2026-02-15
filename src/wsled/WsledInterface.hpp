@@ -4,7 +4,7 @@
 #include "stdint.h"
 
 #include "drivers/wsled.h"
-#include "common.h"
+#include "shared/common.h"
 
 class WsledInterface {
 

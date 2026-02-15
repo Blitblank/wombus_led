@@ -2,13 +2,11 @@
 file(GLOB SRC_FILES
     "*.c"
     "*.cpp"
-    "drivers/*.c"
 )
 
 idf_component_register(
     SRCS ${SRC_FILES}
     PRIV_REQUIRES spi_flash
-    REQUIRES esp_driver_gpio
-    REQUIRES esp_driver_spi
+    REQUIRES esp_driver_gpio esp_driver_spi
     INCLUDE_DIRS "."
 )

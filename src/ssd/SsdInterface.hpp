@@ -4,7 +4,7 @@
 #include "stdint.h"
 
 #include "drivers/ssd.h"
-#include "common.h"
+#include "shared/common.h"
 
 class SsdInterface {
 

@@ -7,7 +7,7 @@
 #include "esp_log.h"
 #include "sdkconfig.h"
 
-#include "pins.hpp"
+#include "shared/pins.h"
 
 #include "DemoTask.hpp"
 

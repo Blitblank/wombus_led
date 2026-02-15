@@ -5,7 +5,11 @@ set(PROJECT_MAIN_COMPONENT ${CMAKE_CURRENT_LIST_DIR}/src)
 
 set(EXTRA_COMPONENT_DIRS
     ${CMAKE_CURRENT_LIST_DIR}/config
-    ${CMAKE_CURRENT_LIST_DIR}/src
+    ${CMAKE_CURRENT_LIST_DIR}/src/drivers
+    ${CMAKE_CURRENT_LIST_DIR}/src/main
+    ${CMAKE_CURRENT_LIST_DIR}/src/tasks
+    ${CMAKE_CURRENT_LIST_DIR}/src/ssd
+    ${CMAKE_CURRENT_LIST_DIR}/src/wsled
 )
 
 # For the esp-idf configuration
