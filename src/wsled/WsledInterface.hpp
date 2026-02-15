@@ -2,6 +2,7 @@
 #pragma once
 
 #include "stdint.h"
+#include <vector>
 
 #include "drivers/wsled.h"
 #include "shared/common.h"
@@ -39,9 +40,8 @@ public:
 private:
 
     const wsled_t* device_;
+    size_t numLeds_;
 
-    static constexpr size_t numLeds_ = 4;
-
-    CRGB leds_[numLeds_];
+    std::vector<CRGB> leds_;
 
 };

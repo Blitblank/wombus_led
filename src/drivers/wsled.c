@@ -9,10 +9,7 @@ extern "C" {
 #endif
 
 static uint16_t* dmaBuffer;
-static CRGB* wsledPixels; // delete
-static uint32_t resetDelay; // delete
-static size_t dmaBufferSize; // delete
-static WsledType type; // delete
+static size_t dmaBufferSize;
 
 static spi_settings_t spiSettings = {
     .host = SPI2_HOST,
@@ -40,31 +37,30 @@ static const uint16_t timingBits[16] = {
     0x1111, 0x7111, 0x1711, 0x7711, 0x1171, 0x7171, 0x1771, 0x7771,
     0x1117, 0x7117, 0x1717, 0x7717, 0x1177, 0x7177, 0x1777, 0x7777};
 
+static inline uint32_t resetDelay(const wsled_t* dev) {
+    return (dev->type == WS2812B) ? WSLED_12_RESET_TIME : WSLED_15_RESET_TIME;
+}
+
 esp_err_t wsledInit(const wsled_t* dev) {
 
     ESP_LOGI(__FILE__, "Initializing wsled device...");
 
-    type = dev->type;
-    resetDelay = (dev->type == WS2812B) ? WSLED_12_RESET_TIME : WSLED_15_RESET_TIME;
-
     ESP_LOGI(__FILE__, "mallocing the wsledPixel buffer with size %u bytes", sizeof(CRGB) * dev->numLeds);
 
     // 12 bytes for each led + bytes for initial zero and reset state
-    dmaBufferSize = dev->numLeds * 12 + (resetDelay + 1) * 2;
+    dmaBufferSize = dev->numLeds * 12 + (resetDelay(dev) + 1) * 2;
 
     spiSettings.buscfg.mosi_io_num = dev->pin;
     spiSettings.buscfg.max_transfer_sz = dmaBufferSize;
 
     ESP_LOGI(__FILE__, "Initializing spi interface...");
     if (ESP_OK != spi_bus_initialize(spiSettings.host, &spiSettings.buscfg, spiSettings.dma_chan)) {
-        free(wsledPixels);
         ESP_LOGI(__FILE__, "SPI initialization failed");
         return -1;
     }
 
     ESP_LOGI(__FILE__, "Adding spi bus device...");
     if (ESP_OK != spi_bus_add_device(spiSettings.host, &spiSettings.devcfg, &spiSettings.spi)) {
-        free(wsledPixels);
         ESP_LOGI(__FILE__, "Failed to add spi bus device");
         return -1;
     }
@@ -72,14 +68,13 @@ esp_err_t wsledInit(const wsled_t* dev) {
     ESP_LOGI(__FILE__, "heap_caps_malloc() with dmaBufferSize=%u...", dmaBufferSize);
     dmaBuffer = heap_caps_malloc(dmaBufferSize, MALLOC_CAP_DMA);
     if (NULL == dmaBuffer) {
-        free(wsledPixels);
         ESP_LOGI(__FILE__, "Failed to heap_caps_malloc");
         return -1;
     }
     return ESP_OK;
 }
 
-esp_err_t wsledUpdate(const CRGB* pixels, size_t ledCount) {
+esp_err_t wsledUpdate(const wsled_t* dev, const CRGB* pixels, size_t ledCount) {
 
     uint32_t n = 0;
 
@@ -90,8 +85,8 @@ esp_err_t wsledUpdate(const CRGB* pixels, size_t ledCount) {
 
         CRGB currentPixel = pixels[i];
 
-        uint8_t b0 = (type == WS2812B) ? currentPixel.g : currentPixel.r;
-        uint8_t b1 = (type == WS2812B) ? currentPixel.r : currentPixel.g;
+        uint8_t b0 = (dev->type == WS2812B) ? currentPixel.g : currentPixel.r;
+        uint8_t b1 = (dev->type == WS2812B) ? currentPixel.r : currentPixel.g;
         uint8_t b2 = currentPixel.b;
 
         // Green
@@ -109,7 +104,7 @@ esp_err_t wsledUpdate(const CRGB* pixels, size_t ledCount) {
     }
 
     // reset pulse
-    for (int i = 0; i < resetDelay; i++) {
+    for (int i = 0; i < resetDelay(dev); i++) {
         dmaBuffer[n++] = 0;
     }
 

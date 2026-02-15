@@ -7,6 +7,8 @@
 #include "wsled/WsledInterface.hpp"
 #include "shared/pins.h"
 
+#define NUM_LEDS 4
+
 DemoTask::DemoTask() {
 
 }
@@ -20,7 +22,7 @@ void DemoTask::run() {
     SsdInterface ssd(&ssdDev, ssdDigits);
 
     // wsled device
-    wsled_t wsledDev = { gpio_ws2812b, WS2812B, 0 /* fixed */};
+    wsled_t wsledDev = { gpio_ws2812b, WS2812B, NUM_LEDS};
     WsledInterface wsled(&wsledDev);
 
     uint32_t delay = 500; // ms
@@ -31,12 +33,8 @@ void DemoTask::run() {
         digit++;
         if(digit >= 16) digit = 0;
 
-        wsled.fill(CRGB{100, 20, 20});
-        wsled.flush();
-
-        vTaskDelay(delay / portTICK_PERIOD_MS);
-
-        wsled.fill(CRGB{20, 20, 100});
+        CRGB color = (digit % 2) ? CRGB{100, 20, 20} : CRGB{20, 20, 100};
+        wsled.fill(color);
         wsled.flush();
 
         vTaskDelay(delay / portTICK_PERIOD_MS);

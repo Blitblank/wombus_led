@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define WSLED_12_RESET_TIME 30
+#define WSLED_12_RESET_TIME 5
 #define WSLED_15_RESET_TIME 30
 
 #ifdef __cplusplus
@@ -41,7 +41,8 @@ typedef struct {
 // initializes the wsled device provided the device settings 
 esp_err_t wsledInit(const wsled_t* dev);
 
-esp_err_t wsledUpdate(const CRGB* pixels, size_t ledCount);
+// outputs the pixel data in pixels to the device
+esp_err_t wsledUpdate(const wsled_t* dev, const CRGB* pixels, size_t ledCount);
 
 #ifdef __cplusplus
 }

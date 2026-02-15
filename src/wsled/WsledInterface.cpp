@@ -1,9 +1,15 @@
 
 #include "WsledInterface.hpp"
 
-WsledInterface::WsledInterface(const wsled_t* device) {
+WsledInterface::WsledInterface(const wsled_t* device) : device_(device), numLeds_(device->numLeds) {
 
     (void)wsledInit(device);
+
+    leds_.resize(numLeds_);
+
+    // turn all leds off
+    (void)fill(CRGB(0, 0, 0));
+    (void)flush();
 
 }
 
@@ -23,7 +29,7 @@ STATUS WsledInterface::get(CRGB* pixel, size_t index) {
 
 STATUS WsledInterface::flush() {
 
-    wsledUpdate(leds_, numLeds_);
+    wsledUpdate(device_, leds_.data(), numLeds_);
 
     return OKAY;
 }
