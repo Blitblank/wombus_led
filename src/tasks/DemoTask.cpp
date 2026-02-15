@@ -29,10 +29,13 @@ void DemoTask::run() {
     uint8_t digit = 0;
 
     while(1) {
+
+        // the SSD demo shifts a single hex digit over
         ssd.writeRaw(&digitMap[digit], 1);
         digit++;
         if(digit >= 16) digit = 0;
 
+        // the wsled demo toggles the entire array between red and blue
         CRGB color = (digit % 2) ? CRGB{100, 20, 20} : CRGB{20, 20, 100};
         wsled.fill(color);
         wsled.flush();

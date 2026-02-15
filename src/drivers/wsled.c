@@ -33,19 +33,18 @@ static spi_settings_t spiSettings = {
         },
 };
 
+// translations from SPI -> ws2812b protocol
+// [spi] 0b1110 = [ws2812b]0b1 and [spi] 0b1000 = [ws2812b]0b0
 static const uint16_t timingBits[16] = {
     0x1111, 0x7111, 0x1711, 0x7711, 0x1171, 0x7171, 0x1771, 0x7771,
     0x1117, 0x7117, 0x1717, 0x7717, 0x1177, 0x7177, 0x1777, 0x7777};
 
+// WS2812b can handle shorter reset delays than the WS2815
 static inline uint32_t resetDelay(const wsled_t* dev) {
     return (dev->type == WS2812B) ? WSLED_12_RESET_TIME : WSLED_15_RESET_TIME;
 }
 
 esp_err_t wsledInit(const wsled_t* dev) {
-
-    ESP_LOGI(__FILE__, "Initializing wsled device...");
-
-    ESP_LOGI(__FILE__, "mallocing the wsledPixel buffer with size %u bytes", sizeof(CRGB) * dev->numLeds);
 
     // 12 bytes for each led + bytes for initial zero and reset state
     dmaBufferSize = dev->numLeds * 12 + (resetDelay(dev) + 1) * 2;
@@ -53,19 +52,16 @@ esp_err_t wsledInit(const wsled_t* dev) {
     spiSettings.buscfg.mosi_io_num = dev->pin;
     spiSettings.buscfg.max_transfer_sz = dmaBufferSize;
 
-    ESP_LOGI(__FILE__, "Initializing spi interface...");
     if (ESP_OK != spi_bus_initialize(spiSettings.host, &spiSettings.buscfg, spiSettings.dma_chan)) {
         ESP_LOGI(__FILE__, "SPI initialization failed");
         return -1;
     }
 
-    ESP_LOGI(__FILE__, "Adding spi bus device...");
     if (ESP_OK != spi_bus_add_device(spiSettings.host, &spiSettings.devcfg, &spiSettings.spi)) {
         ESP_LOGI(__FILE__, "Failed to add spi bus device");
         return -1;
     }
 
-    ESP_LOGI(__FILE__, "heap_caps_malloc() with dmaBufferSize=%u...", dmaBufferSize);
     dmaBuffer = heap_caps_malloc(dmaBufferSize, MALLOC_CAP_DMA);
     if (NULL == dmaBuffer) {
         ESP_LOGI(__FILE__, "Failed to heap_caps_malloc");

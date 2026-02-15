@@ -35,3 +35,11 @@ After cloning: $ ./scripts/repo-setup # installs esp-idf, sets up target configu
 To build:      $ ./scripts/build.sh\
 To flash:      $ ./scripts/flash.sh # note: flash.sh automatically builds\
 To monitor:    $ ./scripts/monitor.sh\
+
+## TODOs for developers
+- [ ] Move all hardware specifications to config/Kconfig.projbuild file. (things like NUM_LEDS, pins.h, ssd_digits, etc.)
+- [ ] Create an effect base class for effects to inherit from
+- [ ] Attach interrupts for hardware inputs
+- [ ] Human I/O (like from buttons, knobs) needs to be in its own io task. Other tasks will be injected with a general I/O interface
+- [ ] Investigate putting the wsled task on a separate core from io and such
+- [ ] Wsled interface needs a platform for matrix creation
